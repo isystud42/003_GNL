@@ -23,26 +23,27 @@
 **on attribue à line ce qu'on a lu jusqu'à present
 */
 
-static int	procession(int const fd, char *buff, char *s[fd])
+static int	procession(int const fd, char *buff, char *s)
 {
 	char	*tmp;
 	char	*pointeur;
 	int		i;
 
 	i = 0;
-	while (!(pointeur = ft_strchr(s[fd], '\n')) &&
+	while (!(pointeur = ft_strchr(s, '\n')) &&
 		(i = read(fd, buff, BUFF_SIZE)) > 0)
 	{
 		buff[i] = '\0';
-		tmp = s[fd];
-		s[fd] = ft_strjoin(tmp, buff);
+		tmp = s;
+		s = ft_strjoin(tmp, buff);
+ft_putendl("strjoin");
 		ft_strdel(&tmp);
 	}
 	if (i == -1)
 		return (-1);
 	if (i == 0 && !pointeur)
 	{
-		if (!ft_strlen(s[fd]))
+		if (!ft_strlen(s))
 			return (0);
 		return (2);
 	}
@@ -64,29 +65,31 @@ static int	procession(int const fd, char *buff, char *s[fd])
 
 int			get_next_line(int const fd, char **line)
 {
-	static char	*s[666];
+	static char	*s = NULL;
 	char		*tmp;
 	int			i;
-	char		*buff;
+	char		buff[BUFF_SIZE];
 
-	if (!(buff = ft_strnew(BUFF_SIZE)) || fd < 0 || !line)
+	if (fd < 0 || !line)
 		return (-1);
-	if (!s[fd])
-		s[fd] = ft_strnew(1);
+	if (!s)
+		s = ft_strnew(1);
 	if ((i = procession(fd, buff, s)) == -1)
 		return (-1);
-	ft_strdel(&buff);
 	if (i == 0 || i == 2)
 	{
-		*line = s[fd];
-		s[fd] = NULL;
-		if (i == 0)
-			return (0);
-		return (1);
+		*line = s;
+		s = NULL;
+		return (i != 0);
 	}
-	*line = ft_strsub(s[fd], 0, ft_strchr(s[fd], '\n') - s[fd]);
-	tmp = s[fd];
-	s[fd] = ft_strdup(ft_strchr(s[fd], '\n') + 1);
+	*line = ft_strsub(s, 0, ft_strchr(s, '\n') - s);
+ft_putendl("strsub");
+	tmp = s;
+ft_putendl("patate");
+	char	*truc = ft_strchr(s, '\n');
+ft_putendl(truc == NULL ? "NULL" : "pas NULL");
+	s = ft_strdup(truc + 1);
+ft_putendl("strdup");
 	ft_strdel(&tmp);
 	return (1);
 }

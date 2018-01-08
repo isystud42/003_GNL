@@ -15,14 +15,16 @@
 char	*ft_strchr(const char *s, int c)
 {
 	size_t	i;
-	char	*mdr;
+	size_t	max;
+	char	*string;
 
 	i = 0;
-	mdr = (char *)s;
-	while (i < (ft_strlen(mdr) + 1))
+	string = (char *)s;
+	max = ft_strlen(string) + 1;
+	while (i < max)
 	{
-		if (mdr[i] == (char)c)
-			return (&mdr[i]);
+		if (string[i] == (char)c)
+			return (&string[i]);
 		i++;
 	}
 	return (NULL);
