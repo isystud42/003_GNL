@@ -1,33 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_listadd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: idsy <idsy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/12/03 14:12:56 by isy               #+#    #+#             */
-/*   Updated: 2019/06/17 17:14:22 by idsy             ###   ########.fr       */
+/*   Created: 2019/04/24 11:49:08 by idsy              #+#    #+#             */
+/*   Updated: 2019/05/06 10:32:22 by idsy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# define BUFF_SIZE 666
-# define REST	s_fd->rest
-# define FD		s_fd->fd
-# define NEXT 	s_fd->next
+#include "libft.h"
 
-# include <stdlib.h>
-# include <unistd.h>
-# include "libft/libft.h"
+/*
+** Basically ft_lstadd but in a structure more usable and usefull with a prev
+*/
 
-typedef struct		s_fd
+void	ft_listadd(t_lst **alst, t_lst *new)
 {
-	int			fd;
-	char		*rest;
-	struct s_fd	*next;
-}					t_fd;
-
-int					get_next_line(int const fd, char **line);
-
-#endif
+	if (alst && new)
+	{
+		new->next = *alst;
+		new->prev = NULL;
+		*alst = new;
+	}
+}

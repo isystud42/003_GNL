@@ -1,33 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_is_smaller.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: idsy <idsy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/12/03 14:12:56 by isy               #+#    #+#             */
-/*   Updated: 2019/06/17 17:14:22 by idsy             ###   ########.fr       */
+/*   Created: 2019/05/06 10:54:58 by idsy              #+#    #+#             */
+/*   Updated: 2019/05/06 11:11:04 by idsy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# define BUFF_SIZE 666
-# define REST	s_fd->rest
-# define FD		s_fd->fd
-# define NEXT 	s_fd->next
+#include "libft.h"
 
-# include <stdlib.h>
-# include <unistd.h>
-# include "libft/libft.h"
+/*
+** Size contest between 2 numbers... Yeah childish, but useful i swear.
+** b has an advantage tho.
+*/
 
-typedef struct		s_fd
+size_t	ft_is_smaller(size_t a, size_t b)
 {
-	int			fd;
-	char		*rest;
-	struct s_fd	*next;
-}					t_fd;
-
-int					get_next_line(int const fd, char **line);
-
-#endif
+	if (a <= b)
+		return (a);
+	else
+		return (b);
+}
