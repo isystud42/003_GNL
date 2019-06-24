@@ -6,7 +6,7 @@
 /*   By: idsy <idsy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/24 11:27:02 by idsy              #+#    #+#             */
-/*   Updated: 2019/05/06 10:27:35 by idsy             ###   ########.fr       */
+/*   Updated: 2019/06/24 10:59:09 by idsy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,20 @@
 **	fraiche avec un free des anciens components.
 */
 
-char	*ft_strjoin_free(char *s1, char *s2)
+static void	free_str(char **s1, char **s2, int flag)
+{
+	if (flag == 1)
+		free(*s1);
+	if (flag == 2)
+		free(*s2);
+	if (flag == 3)
+	{
+		free(*s1);
+		free(*s2);
+	}
+}
+
+char	*ft_strjoin_free(char *s1, char *s2, int flag)
 {
 	char	*new;
 	char	*s_s1;
@@ -35,7 +48,6 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	while (*s_s2)
 		*s_new++ = *s_s2++;
 	*s_new = '\0';
-	free(s1);
-	free(s2);
+	free_str(&s1,&s2,flag);
 	return (new);
 }

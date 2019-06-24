@@ -6,7 +6,7 @@
 /*   By: idsy <idsy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/20 11:35:41 by isy               #+#    #+#             */
-/*   Updated: 2019/06/17 18:19:22 by idsy             ###   ########.fr       */
+/*   Updated: 2019/06/24 10:58:55 by idsy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void				ft_lstshift(t_list **alst);
 size_t				ft_strcspn(const char *s, const char *charset);
 void				ft_putnerror(char *errormessage);
 char				*ft_open_and_return(int ac, char **av);
-char				*ft_strjoin_free(char *s1, char *s2);
+char				*ft_strjoin_free(char *s1, char *s2, int flag);
 char				*ft_strrealloc(char **str, size_t new_size);
 void				ft_listadd(t_lst **alst, t_lst *new);
 size_t				ft_is_smaller(size_t a, size_t b);

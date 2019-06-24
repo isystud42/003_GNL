@@ -6,48 +6,11 @@
 /*   By: idsy <idsy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/21 04:47:44 by isy               #+#    #+#             */
-/*   Updated: 2019/06/21 11:33:29 by idsy             ###   ########.fr       */
+/*   Updated: 2019/06/24 18:31:55 by idsy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-/*
-**tant qu'on lit bien des choses et que dans ce qu'on a lu il n'y a pas de \n
-**on ferme le buff
-**on attribue l'ancienne partie lue à tmp
-**et on l'asocie à la nouvelle
-**puis on free ce qu'on venait de faire
-**si le read a echoué -> erreur (if numero 1)
-**si on a rien lu et qu'on a pas trouvé de \n (if numero 2)
-**on attribue à line ce qu'on a lu jusqu'à present
-*/
-
-// static int	procession(int const fd, char *buff, char *s[fd])
-// {
-// 	char	*tmp;
-// 	char	*pointeur;
-// 	int		i;
-
-// 	i = 0;
-// 	while (!(pointeur = ft_strchr(s[fd], '\n')) &&
-// 		(i = read(fd, buff, BUFF_SIZE)) > 0)
-// 	{
-// 		buff[i] = '\0';
-// 		tmp = s[fd];
-// 		s[fd] = ft_strjoin(tmp, buff);
-// 		ft_strdel(&tmp);
-// 	}
-// 	if (i == -1)
-// 		return (-1);
-// 	if (i == 0 && !pointeur)
-// 	{
-// 		if (!ft_strlen(s[fd]))
-// 			return (0);
-// 		return (2);
-// 	}
-// 	return (1);
-// }
 
 /*
 **la string du fd
@@ -59,38 +22,8 @@
 **on redirige cette partie vers tmp
 **on recrée s[fd] à partir de lui même en enlevant sa partie defectueuse
 **\n conpris
-**on supprime tmp pour les leaks
+**-on supprime tmp pour les leaks
 */
-
-int			get_next_line(int const fd, char **line)
-{
-	static char	*s[666];
-	char		*tmp;
-	int			i;
-	char		*buff;
-
-	if (!(buff = ft_strnew(BUFF_SIZE)) || fd < 0 || !line)
-		return (-1);
-	if (!s[fd])
-		s[fd] = ft_strnew(1);
-	if ((i = procession(fd, buff, s)) == -1)
-		return (-1);
-	ft_strdel(&buff);
-	if (i == 0 || i == 2)
-	{
-		*line = s[fd];
-		s[fd] = NULL;
-		if (i == 0)
-			return (0);
-		return (1);
-	}
-	*line = ft_strsub(s[fd], 0, ft_strchr(s[fd], '\n') - s[fd]);
-	tmp = s[fd];
-	s[fd] = ft_strdup(ft_strchr(s[fd], '\n') + 1);
-	ft_strdel(&tmp);
-	return (1);
-}
-
 
 /**
  * check if special stuct exists for fd, if not, create, if failed to create, error
@@ -124,16 +57,27 @@ static t_fd	*check_fd_struct(int fd, t_fd *s_list)
 	return(s_fd);	
 }
 
-static int	cut_and_store(t_fd *s_fd, char *buff, char **line, char *p)
+/*
+** cut and store... come on, it's in the title dum'ass
+*/
+
+static int	cut_and_store(t_fd *s_fd, char **buff, char **line, char *p)
 {
 	if (!s_fd || !buff || !line || !*line || !p)
 		return (-1);
-	//copy currentl line
-	//free ex pointeur and resize to desired size
-	//copy ex line in, put new content in + /0
-	//cut string, store rest of it in s_fd->rest
+	*line = ft_strrealloc(line,(ft_strlen(*line)+(p-*buff)));
+	*line = ft_strjoin_free(*line,ft_strsub(*buff,0,p-*buff),2);
+	if (!REST)
+		REST = ft_strsub(buff,p-*buff,ft_strlen(p));
+	else
+		REST = ft_strjoin_free(REST,ft_strsub(buff,p-*buff,ft_strlen(p)),2);
 	return (0);
 }
+
+/*
+**	The process function is the one that treats buffer reading and cuting + storing
+**	data into REST and line. Easy
+*/
 
 static int	procession(int fd, char *buff, char **line, t_fd *s_fd)
 {
@@ -154,15 +98,45 @@ static int	procession(int fd, char *buff, char **line, t_fd *s_fd)
 	return (0);	
 }
 
-static int	treat_rest()
+/*
+**	treat_rest, well... it treats the rest of the buffer precedently not treated
+**	verifying if there is a '\n' anywhere in it before cuting it and storing bac
+**	the rest of the rest into rest. Yeah i'm very eloquent i know.
+**	if no '\n' is found, you just paste the rest into the line and continue process
+**	after freeing the rest pointer so you avoid leaks in the last run.
+*/
+
+static int	treat_rest(char **line, t_fd *s_fd)
 {
-	if ()
+	char	*pointeur;
+	char	*tmp;
+
+	if (!line || !s_fd)
+		return (-1);
+	if (REST)
 	{
-		
+		if (pointeur = ft_strchr(*line,'\n'))
+		{
+			*line = ft_strrealloc(line,(ft_strlen(*line)+(pointeur-REST)+1));
+			ft_strjoin_free(*line,ft_strsub(REST,0,pointeur-REST),2);
+			tmp = REST;
+			REST = ft_strsub(REST,pointeur+1,ft_strlen(pointeur+1));
+			free(tmp);
+			return (1);
+		}
+		else
+		{
+			*line = ft_strrealloc(line,(ft_strlen(*line)+ft_strlen(REST)+1));
+			ft_strjoin_free(*line,s_fd->rest,2);
+		}
 	}
-	free(s_fd->next);
 	return (0);
 }
+
+/*
+**	get_next_line is basically a function that reads a fd and gets a line into a char*
+**	
+*/
 
 int			get_next_line(int fd, char **line)
 {
@@ -175,7 +149,7 @@ int			get_next_line(int fd, char **line)
 		|| !(s_fd = check_fd_struct(fd, s_list)))
 		return (-1);
 	*line = (char *)malloc(sizeof(char));
-	if (s_fd->rest)
+	if (REST)
 	{
 		if (treat_rest(s_list, line))
 			return (1);
@@ -183,12 +157,3 @@ int			get_next_line(int fd, char **line)
 	state = procession(fd,buff,line,s_fd);
 	return (state);
 }
-
-
-/*
-** check le rest, si il n'est pas vide, on ne continue pas a lire
-** si il n'est pas vide , on le prcours jusqu'au \n et on le coupe plus line
-** Si pas de backslash n on l'ajoute a 100% et on passe a la suite
-**	si il est fini on lis et on check pour un \n
-**	  si on a un backslash n on cut et on stocke
-*/
