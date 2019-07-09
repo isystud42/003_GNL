@@ -6,7 +6,7 @@
 /*   By: idsy <idsy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/20 11:35:41 by isy               #+#    #+#             */
-/*   Updated: 2019/06/24 10:58:55 by idsy             ###   ########.fr       */
+/*   Updated: 2019/07/08 18:34:22 by idsy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ typedef struct		s_list
 	struct s_list	*next;
 }					t_list;
 
-typedef struct		s_list
+typedef struct		s_lst
 {
 	void			*content;
 	size_t			content_size;
-	struct s_list	*prev;
-	struct s_list	*next;
+	struct s_lst	*prev;
+	struct s_lst	*next;
 }					t_lst;
 
 void				*ft_memset(void *str, int c, size_t n);

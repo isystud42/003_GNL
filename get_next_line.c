@@ -6,7 +6,7 @@
 /*   By: idsy <idsy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/21 04:47:44 by isy               #+#    #+#             */
-/*   Updated: 2019/06/24 18:31:55 by idsy             ###   ########.fr       */
+/*   Updated: 2019/07/09 11:19:36 by idsy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,9 @@ static int	cut_and_store(t_fd *s_fd, char **buff, char **line, char *p)
 	*line = ft_strrealloc(line,(ft_strlen(*line)+(p-*buff)));
 	*line = ft_strjoin_free(*line,ft_strsub(*buff,0,p-*buff),2);
 	if (!REST)
-		REST = ft_strsub(buff,p-*buff,ft_strlen(p));
+		REST = ft_strsub(*buff,p-*buff,ft_strlen(p));
 	else
-		REST = ft_strjoin_free(REST,ft_strsub(buff,p-*buff,ft_strlen(p)),2);
+		REST = ft_strjoin_free(REST,ft_strsub(*buff,p-*buff,ft_strlen(p)),2);
 	return (0);
 }
 
@@ -84,17 +84,16 @@ static int	procession(int fd, char *buff, char **line, t_fd *s_fd)
 	int		ret;
 	char	*pointeur;
 
-	while (ret = read(fd, buff, BUFF_SIZE)) > 0)
+	while ((ret = read(fd, buff, BUFF_SIZE)))
 	{
 		buff[ret] = '\0';
-		if (pointeur = ft_strchr(buff, '\n'))
+		if ((pointeur = ft_strchr(buff, '\n')))
 		{
-			cut_and_store(s_fd, buff, line, pointeur);
+			cut_and_store(s_fd, &buff, line, pointeur);
 			return (1);
 		}
-		//join buff to line
+		*line = ft_strjoin_free(*line,buff,1);
 	}
-	//join buff to line
 	return (0);	
 }
 
@@ -115,12 +114,12 @@ static int	treat_rest(char **line, t_fd *s_fd)
 		return (-1);
 	if (REST)
 	{
-		if (pointeur = ft_strchr(*line,'\n'))
+		if ((pointeur = ft_strchr(*line,'\n')))
 		{
 			*line = ft_strrealloc(line,(ft_strlen(*line)+(pointeur-REST)+1));
 			ft_strjoin_free(*line,ft_strsub(REST,0,pointeur-REST),2);
 			tmp = REST;
-			REST = ft_strsub(REST,pointeur+1,ft_strlen(pointeur+1));
+			REST = ft_strsub(REST,(pointeur-*line)+1,ft_strlen(pointeur+1));
 			free(tmp);
 			return (1);
 		}
@@ -151,9 +150,11 @@ int			get_next_line(int fd, char **line)
 	*line = (char *)malloc(sizeof(char));
 	if (REST)
 	{
-		if (treat_rest(s_list, line))
+		if (treat_rest(line, s_list))
 			return (1);
 	}
 	state = procession(fd,buff,line,s_fd);
+	if (state == 0)
+		free(buff);
 	return (state);
 }
