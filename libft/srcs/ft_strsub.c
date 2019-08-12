@@ -6,7 +6,7 @@
 /*   By: idsy <idsy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/24 11:51:29 by isy               #+#    #+#             */
-/*   Updated: 2019/06/24 10:54:21 by idsy             ###   ########.fr       */
+/*   Updated: 2019/07/12 12:01:30 by idsy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,17 @@
 
 char	*ft_strsub(char const *s, unsigned int start, size_t len)
 {
-	char	*lol;
+	char	*new_str;
 	size_t	countdown;
 
 	countdown = 0;
-	if (s)
-	{
-		lol = (char *)malloc(sizeof(char) * (len + 1));
-		if (lol == NULL)
-			return (NULL);
-		while (countdown < len)
-		{
-			lol[countdown] = s[start + countdown];
-			countdown++;
-		}
-		lol[countdown] = '\0';
-		return (lol);
-	}
-	else
+	if (!s || !(new_str = (char *)malloc(sizeof(char) * (len + 1))))
 		return (NULL);
+	while (countdown < len)
+	{
+		*(new_str + countdown) = *(s + start + countdown);
+		countdown++;
+	}
+	*(new_str + countdown) = '\0';
+	return (new_str);
 }

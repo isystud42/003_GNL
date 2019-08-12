@@ -1,39 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strrealloc.c                                    :+:      :+:    :+:   */
+/*   ft_deb.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: idsy <idsy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/24 10:05:20 by idsy              #+#    #+#             */
-/*   Updated: 2019/08/12 18:33:48 by idsy             ###   ########.fr       */
+/*   Created: 2019/07/09 11:35:42 by idsy              #+#    #+#             */
+/*   Updated: 2019/08/12 19:13:34 by idsy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdio.h>
 
-/*
-** Gimme a string adress, i will resize it for you with fresh memory <3
-*/
-
-char	*ft_strrealloc(char **str, size_t new_size)
+void	ft_deb(char *file, int line)
 {
-	char	*new_str;
-	char	*tmp;
-	char	*save;
-
-	if (!(new_str = malloc(sizeof(char) * new_size + 1)))
-		return (NULL);
-	tmp = new_str;
-	save = *str;
-	while (tmp - new_str < (long)new_size)
-	{
-		if (*str)
-			*tmp++ = *save++;
-		else
-			*tmp++ = '\0';
-	}
-	*tmp = '\0';
-	free(*str);
-	return (new_str);
+	printf("\033[1;31mFILE : \"%s", file);
+	printf("\" \033[0m| \033[1;36mLINE : \"%d\"\033[0m\n", line);
 }

@@ -6,7 +6,7 @@
 #    By: idsy <idsy@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/20 10:48:13 by isy               #+#    #+#              #
-#    Updated: 2019/07/08 18:29:29 by idsy             ###   ########.fr        #
+#    Updated: 2019/07/09 11:42:09 by idsy             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ SRCS_FILES = ft_atoi.c ft_atoi_base.c ft_bzero.c ft_deltab.c ft_is_bigger.c\
 			ft_strmap.c ft_strmapi.c ft_strncat.c ft_strncmp.c ft_strncpy.c ft_strndup.c\
 			ft_strnequ.c ft_strnew.c ft_strnstr.c ft_strrchr.c ft_strrealloc.c\
 			ft_strsplit.c ft_strstr.c ft_strsub.c ft_strtrim.c ft_swap.c ft_tolower.c\
-			ft_toupper.c
+			ft_toupper.c ft_deb.c
 
 OBJS_PATH = objs/
 OBJS_FILES = $(SRCS_FILES:.c=.o)

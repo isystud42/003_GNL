@@ -6,7 +6,7 @@
 /*   By: idsy <idsy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/20 11:35:41 by isy               #+#    #+#             */
-/*   Updated: 2019/07/08 18:34:22 by idsy             ###   ########.fr       */
+/*   Updated: 2019/07/10 13:34:28 by idsy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <unistd.h>
+# define DEB ft_deb(__FILE__,__LINE__);
 
 typedef struct		s_list
 {
@@ -110,5 +111,6 @@ void				ft_listadd(t_lst **alst, t_lst *new);
 size_t				ft_is_smaller(size_t a, size_t b);
 size_t				ft_is_bigger(size_t a, size_t b);
 int					ft_atoi_base(char *s, int base_size);
+void				ft_deb(char *file, int line);
 
 #endif
